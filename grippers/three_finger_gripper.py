@@ -5,8 +5,8 @@ from utils.bluetooth import Bluetooth
 
 
 class ThreeFingerGripper(Gripper):
-    def __init__(self, height, width, length):
-        super().__init__(height, width, length)
+    def __init__(self, height, width, length, weight):
+        super().__init__(height, width, length, weight)
         self.gripper_receiver = Bluetooth(mac='00:18:e4:34:d4:18', port=1)
 
     def open(self):
@@ -17,7 +17,7 @@ class ThreeFingerGripper(Gripper):
 
 
 if __name__ == '__main__':
-    gripper = ThreeFingerGripper(0, 0, 0)
+    gripper = ThreeFingerGripper(0, 0, 0, 0.150)
     gripper.open()
     time.sleep(3)
     gripper.close()
