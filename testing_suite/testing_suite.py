@@ -1,11 +1,15 @@
+import traceback
+
 from grippers.three_finger_gripper import ThreeFingerGripper
 from testing_suite.tests.payload import PayloadTest
+from utils.robotic_arm import Arm
 
 
 class TestingSuite:
     def __init__(self):
+        self._robotic_arm = Arm(0)
         self._tests_list = [
-            PayloadTest()
+            PayloadTest(self._robotic_arm)
         ]
 
         # TODO: update gripper weight
@@ -14,13 +18,17 @@ class TestingSuite:
         ]
 
     def run_tests(self):
-        for gripper in self._grippers:
-            for test in self._tests_list:
-                test.set_gripper(gripper)
+        try:
+            for gripper in self._grippers:
+                for test in self._tests_list:
+                    test.set_gripper(gripper)
 
-                while not test.is_finished:
                     test.pre_test()
-                    test.perform_test()
-                    test.post_test()
-
-
+                    while not test.is_finished:
+                        test.perform_test()
+                        test.post_test()
+                    test.finish_testing()
+        except Exception as e:
+            traceback.print_exc()
+        finally:
+            self._robotic_arm.stop()

@@ -13,9 +13,6 @@ WRIST_3 = 0
 # POSES IN LINEAR SPACE
 HOME = [BASE, SHOULDER, ELBOW, WRIST_1, WRIST_2, WRIST_3]
 PICKUP_POSE = [0, -1.57, 1.57, -1.57, -1.57, 0]
-# comments from their code - # pi/2, -1.7947, 1.2356, pi -1.033, -pi/2 which is -1.5710, 0.0051
-COMFORTABLE_POSE = [0, -1.9049, 1.9520, -1.6088, -3.14/2, 0]
-# CP = [*COMFORTABLE_POSE[:6], *HOME[6:]]
 
 # POSES IN TCP SPACE
 # Z in this positions is fucked up
@@ -31,16 +28,33 @@ class Arm:
         # self.robot.set_payload(payload_weight)
         time.sleep(0.5)  # leave some time to robot to process the setup commands
         # self.move(BASE, SHOULDER, ELBOW, WRIST_1, WRIST_2, WRIST_3)
+        self._command_memory = []
 
     def update_weight(self, new_weight: float):
         self.robot.set_payload(new_weight)
         time.sleep(0.2)
 
-    def move(self, base, shoulder, elbow, wrist_1, wrist_2, wrist_3):
-        self.robot.movej([base, shoulder, elbow, wrist_1, wrist_2, wrist_3], vel=1.56)
+    def home(self):
+        for command in self._command_memory[::-1]:
+            if command[0] == "j":
+                self.move(*command[1])
+            elif command[0] == "l":
+                self.move_cartesian(*command[1])
+        self._command_memory = []
 
-    def move_cartesian(self, x, y, z, rx, ry, rz):
-        self.robot.movel([x, y, z, rx, ry, rz], vel=0.1)
+    def move(self, base, shoulder, elbow, wrist_1, wrist_2, wrist_3, add_to_history=False):
+        if add_to_history:
+            self._command_memory.append(("j", self.robot.getj()))
+        self.robot.movej([base, shoulder, elbow, wrist_1, wrist_2, wrist_3], vel=1.56, acc=0.3)
+
+    def move_cartesian(self, x, y, z, rx, ry, rz, add_to_history=False):
+        if add_to_history:
+            self._command_memory.append(("l", self.robot.getl()))
+        self.robot.movel([x, y, z, rx, ry, rz], vel=1.56, acc=0.3)
+
+    def stop(self):
+        self.robot.close()
+
 
 if __name__ == '__main__':
     # try:

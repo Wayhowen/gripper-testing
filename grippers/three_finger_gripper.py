@@ -1,7 +1,7 @@
 import time
 
 from grippers.gripper_base import Gripper
-from utils.bluetooth import Bluetooth
+from utils.bluetooth.pybluez import Bluetooth
 
 
 class ThreeFingerGripper(Gripper):
