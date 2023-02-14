@@ -1,0 +1,4 @@
+math3d==3.4.1
+numpy==1.19.5
+PyBluez==0.23
+urx @ git+https://github.com/jkur/python-urx@a61f512a884a9c3b5b66938dc15fa6b831b5e2ff
