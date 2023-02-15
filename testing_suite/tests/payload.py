@@ -1,32 +1,47 @@
 from testing_suite.tests.test_base import Test
 from utils.robotic_arm import Arm
+from utils.utils import input_getter
 
 ABOVE_PAYLOAD_TCP_POSE = [-0.6, -0.109, 0.35, 2.22, 2.22, 0]
+LOWER_PAYLOAD_TCP_POSE = [-0.6, -0.109, 0.15, 2.22, 2.22, 0]
 ENGAGEMENT_TCP_POSE = [-0.6, -0.109, 0.03, 2.22, 2.22, 0]
-# comments from their code - # pi/2, -1.7947, 1.2356, pi -1.033, -pi/2 which is -1.5710, 0.0051
-COMFORTABLE_POSE = [0, -1.9049, 1.9520, -1.6088, -3.14/2, 0]
 
 
 class PayloadTest(Test):
-    def __init__(self, robotic_arm: Arm):
+    def __init__(self, robotic_arm: Arm, initial_payload_weight):
         super().__init__(robotic_arm)
-        self.initial_payload_weight_grams = 0.0
+        self.payload_weight = initial_payload_weight
 
     # move to grasp the "holder"
     def pre_test(self):
-        self._arm.move(*COMFORTABLE_POSE, add_to_history=True)
         self._arm.move_cartesian(*ABOVE_PAYLOAD_TCP_POSE, add_to_history=True)
-        self._arm.move_cartesian(*ENGAGEMENT_TCP_POSE, add_to_history=True)
+        self._arm.move_cartesian(*LOWER_PAYLOAD_TCP_POSE, add_to_history=True)
 
-    # lift holder up
+    # lift gripper up
     def perform_test(self):
-        self._arm.move_cartesian(*ABOVE_PAYLOAD_TCP_POSE)
+        print("Please provide weight added in grams as float:")
+        self.payload_weight += input_getter(None, float)
         self._arm.move_cartesian(*ENGAGEMENT_TCP_POSE)
+        # TODO: catch
+        self._arm.move_cartesian(*LOWER_PAYLOAD_TCP_POSE)
+        # TODO: let go
+        self._arm.move_cartesian(*ENGAGEMENT_TCP_POSE)
+        self._arm.move_cartesian(*LOWER_PAYLOAD_TCP_POSE)
 
     # place holder down on the ground and wait for input telling whether to continue or not
     def post_test(self):
-        self._is_finished = True
+        print("Was test successfull? y/n")
+        letter = input_getter(["y", "n"], str)
+        success = True if letter == "y" else False
+        self.test_result.runs_data.append(
+            {
+                "weight": self.payload_weight,
+                "success": success
+            }
+        )
+        self._is_finished = not success
 
     # reset to initial position
     def finish_testing(self):
-        self._arm.home()
+        self._arm.back_to_comfortable_pose()
+        return self.test_result

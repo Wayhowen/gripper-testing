@@ -17,7 +17,7 @@ class CSVWriter:
             os.mkdir(self._test_folder_name)
 
         for test_result in test_results:
-            with open(f"{self._test_folder_name}/{test_result.test_name}") as file:
+            with open(f"{self._test_folder_name}/{test_result.test_name}", "a+") as file:
                 writer = csv.writer(file)
                 writer.writerow(test_result.column_names)
                 for run_result in test_result.runs_data:
