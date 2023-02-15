@@ -22,8 +22,10 @@ ENGAGEMENT_TCP_POSE = [-0.6, -0.109, 0.03, 2.22, 2.22, 0]
 
 
 class Arm:
-    def __init__(self, payload_weight):
+    def __init__(self, payload_weight, speed=1.5, acceleration=0.3):
         self.robot = Robot("192.168.56.10")
+        self._speed = speed
+        self._acceleration = acceleration
         #self.robot.set_tcp((0, 0, 0.1, 0, 0, 0))
         # self.robot.set_payload(payload_weight)
         time.sleep(0.5)  # leave some time to robot to process the setup commands
@@ -45,12 +47,12 @@ class Arm:
     def move(self, base, shoulder, elbow, wrist_1, wrist_2, wrist_3, add_to_history=False):
         if add_to_history:
             self._command_memory.append(("j", self.robot.getj()))
-        self.robot.movej([base, shoulder, elbow, wrist_1, wrist_2, wrist_3], vel=1.56, acc=0.3)
+        self.robot.movej([base, shoulder, elbow, wrist_1, wrist_2, wrist_3], vel=self._speed, acc=self._acceleration)
 
     def move_cartesian(self, x, y, z, rx, ry, rz, add_to_history=False):
         if add_to_history:
             self._command_memory.append(("l", self.robot.getl()))
-        self.robot.movel([x, y, z, rx, ry, rz], vel=1.56, acc=0.3)
+        self.robot.movel([x, y, z, rx, ry, rz], vel=self._speed, acc=self._acceleration)
 
     def stop(self):
         self.robot.close()

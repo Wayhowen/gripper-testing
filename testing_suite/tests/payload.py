@@ -10,10 +10,10 @@ COMFORTABLE_POSE = [0, -1.9049, 1.9520, -1.6088, -3.14/2, 0]
 class PayloadTest(Test):
     def __init__(self, robotic_arm: Arm):
         super().__init__(robotic_arm)
+        self.initial_payload_weight_grams = 0.0
 
     # move to grasp the "holder"
     def pre_test(self):
-        print("pre test")
         self._arm.move(*COMFORTABLE_POSE, add_to_history=True)
         self._arm.move_cartesian(*ABOVE_PAYLOAD_TCP_POSE, add_to_history=True)
         self._arm.move_cartesian(*ENGAGEMENT_TCP_POSE, add_to_history=True)

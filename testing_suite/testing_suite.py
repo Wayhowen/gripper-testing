@@ -23,10 +23,16 @@ class TestingSuite:
                 for test in self._tests_list:
                     test.set_gripper(gripper)
 
+                    print(f"Pre-testing of {test.name}")
                     test.pre_test()
+                    test_iteration = 1
                     while not test.is_finished:
+                        print(f"Testing run {test_iteration}")
                         test.perform_test()
+                        print(f"Running post test scripts")
                         test.post_test()
+                        test_iteration += 1
+                    print(f"Testing of {test.name} finished")
                     test.finish_testing()
         except Exception as e:
             traceback.print_exc()

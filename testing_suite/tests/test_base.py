@@ -1,5 +1,6 @@
 from abc import abstractmethod
 
+from dto.test_result import TestResult
 from grippers.gripper_base import Gripper
 from utils.robotic_arm import Arm
 
@@ -9,6 +10,11 @@ class Test:
         self._gripper = None
         self._arm = robotic_arm
         self._is_finished = False
+        self.test_result = TestResult(self.name, [])
+
+    @property
+    def name(self):
+        return self.__class__.__name__
 
     def set_gripper(self, gripper: Gripper):
         self._gripper = gripper
