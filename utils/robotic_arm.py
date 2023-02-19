@@ -3,24 +3,7 @@ import traceback
 
 from urx import Robot
 
-BASE = 0
-SHOULDER = -1.57
-ELBOW = 0
-WRIST_1 = -1.57
-WRIST_2 = 0
-WRIST_3 = 0
-
-# POSES IN LINEAR SPACE
-HOME = [BASE, SHOULDER, ELBOW, WRIST_1, WRIST_2, WRIST_3]
-# comments from their code - # pi/2, -1.7947, 1.2356, pi -1.033, -pi/2 which is -1.5710, 0.0051
-COMFORTABLE_POSE = [0, -1.9049, 1.9520, -1.6088, -3.14/2, 0]
-PICKUP_POSE = [0, -1.57, 1.57, -1.57, -1.57, 0]
-
-# POSES IN TCP SPACE
-# Z in this positions is fucked up
-COMFORTABLE_TCP_POSE = [-0.347, -0.109, 0.35, 2.22, 2.22, 0]
-ABOVE_PAYLOAD_TCP_POSE = [-0.6, -0.109, 0.35, 2.22, 2.22, 0]
-ENGAGEMENT_TCP_POSE = [-0.6, -0.109, 0.03, 2.22, 2.22, 0]
+from utils.poses import POSES
 
 
 class Arm:
@@ -35,7 +18,7 @@ class Arm:
             # self.move(BASE, SHOULDER, ELBOW, WRIST_1, WRIST_2, WRIST_3)
             self._command_memory = []
 
-            self.move(*COMFORTABLE_POSE)
+            self.move(*POSES.COMFORTABLE_POSE)
         except Exception as e:
             print("Connection exception, closing")
             self.stop()
@@ -75,7 +58,7 @@ class Arm:
 
     def stop(self, home=False):
         if home:
-            self.move(*HOME)
+            self.move(*POSES.HOME)
         self.robot.close()
 
 
@@ -86,7 +69,7 @@ if __name__ == '__main__':
         # a.move(*COMFORTABLE_POSE)
         # a.robot.stopj()
         # print(*TEST_TCP_POSE)
-        a.move_cartesian(*ENGAGEMENT_TCP_POSE)
+        a.move_cartesian(*POSES.ENGAGEMENT_TCP_POSE_1)
         print(a.robot.getl())
         # a.robot.stopl()
     except Exception as e:
