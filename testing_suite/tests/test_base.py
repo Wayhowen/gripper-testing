@@ -36,5 +36,5 @@ class Test:
         raise NotImplementedError
 
     @abstractmethod
-    def finish_testing(self):
+    def finish_testing(self) -> TestResult:
         raise NotImplementedError

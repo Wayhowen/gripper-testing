@@ -1,3 +1,4 @@
+from dto.test_result import TestResult
 from testing_suite.tests.test_base import Test
 from utils.robotic_arm import Arm
 from utils.utils import input_getter
@@ -42,6 +43,6 @@ class PayloadTest(Test):
         self._is_finished = not success
 
     # reset to initial position
-    def finish_testing(self):
+    def finish_testing(self) -> TestResult:
         self._arm.back_to_comfortable_pose()
         return self.test_result
