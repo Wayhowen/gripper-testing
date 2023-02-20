@@ -19,11 +19,15 @@ class PayloadTest(Test):
     def perform_test(self):
         print("Please provide weight added in grams as float:")
         self.payload_weight += input_getter(None, float)
-        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, 1))
-        # TODO: catch
+        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object_height, 1))
+
+        self._gripper.close()
+
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
-        # TODO: let go
-        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, 1))
+        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object_height, 1))
+
+        self._gripper.open()
+
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
 
     # place holder down on the ground and wait for input telling whether to continue or not

@@ -1,6 +1,4 @@
-from typing import List
-
-from grippers.gripper_base import Gripper
+import copy
 
 
 class POSES:
@@ -24,18 +22,18 @@ class POSES:
 
     ABOVE_PAYLOAD_TCP_POSE_1 = [-0.6, -0.109, 0.35, 2.22, 2.22, 0]
     LOWER_PAYLOAD_TCP_POSE_1 = [-0.6, -0.109, 0.15, 2.22, 2.22, 0]
-    ENGAGEMENT_TCP_POSE_1 = [-0.6, -0.109, 0.03, 2.22, 2.22, 0]
+    ENGAGEMENT_TCP_POSE_1 = [-0.6, -0.109, -0.06, 2.22, 2.22, 0]
 
     # TODO: add above and engagement poses for second location
     ABOVE_PAYLOAD_TCP_POSE_2 = [-0.6, -0.109, 0.35, 2.22, 2.22, 0]
-    LOWER_PAYLOAD_TCP_POSE_2 = [-0.6, -0.109, 0.15, 2.22, 2.22, 0]
-    ENGAGEMENT_TCP_POSE_2 = [-0.6, -0.109, 0.03, 2.22, 2.22, 0]
+    LOWER_PAYLOAD_TCP_POSE_2 = [-0.6, -0.109, 0.05, 2.22, 2.22, 0]
+    ENGAGEMENT_TCP_POSE_2 = [-0.6, -0.109, -0.05, 2.22, 2.22, 0]
 
     @staticmethod
-    def get_engagement_pose(gripper: Gripper, pose_number: int):
+    def get_engagement_pose(gripper, object_height, pose_number: int):
         if pose_number == 1:
-            pose = POSES.ENGAGEMENT_TCP_POSE_1
+            pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_1)
         else:
-            pose = POSES.ENGAGEMENT_TCP_POSE_2
-        pose[2] -= gripper.height
+            pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_2)
+        pose[2] += gripper.height + object_height
         return pose

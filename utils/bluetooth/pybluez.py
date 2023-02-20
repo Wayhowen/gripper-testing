@@ -11,13 +11,14 @@ class Bluetooth:
 
     def send(self, data):
         self._socket.send(bytes(str(data), 'UTF-8'))
+        self.wait_until_received()
 
     def close_connection(self):
         self._socket.close()
 
     # TODO: if we figure out how to do bluetooth send/receive, change this
     def wait_until_received(self):
-        pass
+        time.sleep(2)
 
 if __name__ == '__main__':
     # simple inquiry example

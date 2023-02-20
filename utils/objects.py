@@ -1,0 +1,2 @@
+class OBJECTS:
+    PAYLOAD_BOX = 0.03

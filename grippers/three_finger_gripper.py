@@ -7,7 +7,7 @@ from utils.bluetooth.pybluez import Bluetooth
 class ThreeFingerGripper(Gripper):
     def __init__(self, height, width, length, weight):
         super().__init__(height, width, length, weight, arm_connected=False)
-        self.gripper_receiver = Bluetooth(mac='00:18:e4:34:d4:18', port=1)
+        self.gripper_receiver = Bluetooth(mac='20:16:03:10:03:48', port=1)
         self.open()
 
     def open(self):
