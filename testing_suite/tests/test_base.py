@@ -2,13 +2,14 @@ from abc import abstractmethod
 
 from dto.test_result import TestResult
 from grippers.gripper_base import Gripper
+from utils.objects import Object
 from utils.robotic_arm import Arm
 
 
 class Test:
     def __init__(self, robotic_arm: Arm):
         self._gripper = None
-        self._object_height = 0
+        self._object = None
         self._arm = robotic_arm
         self._is_finished = False
         self.test_result = TestResult(self.name, [])
@@ -20,8 +21,8 @@ class Test:
     def set_gripper(self, gripper: Gripper):
         self._gripper = gripper
 
-    def set_object_height(self, object_height: float):
-        self._object_height = object_height
+    def set_object(self, obj: Object):
+        self._object = obj
 
     @property
     def is_finished(self):
@@ -40,5 +41,5 @@ class Test:
         raise NotImplementedError
 
     @abstractmethod
-    def finish_testing(self) -> TestResult:
+    def finish_testing(self, *args, **kwargs) -> TestResult:
         raise NotImplementedError

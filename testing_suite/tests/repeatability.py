@@ -6,22 +6,57 @@ from utils.utils import input_getter
 
 
 class RepeatabilityTest(Test):
-    def __init__(self, robotic_arm: Arm):
+    def __init__(self, robotic_arm: Arm, repeat_times: int):
         super().__init__(robotic_arm)
+        self._repeat_times = repeat_times
+        self._repeat_counter = 1
 
     # move to grasp the "holder"
     def pre_test(self):
-        pass
+        self._is_finished = False
+        self._arm.move_cartesian(*POSES.ABOVE_PAYLOAD_TCP_POSE_1, add_to_history=True)
+        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
 
     # lift gripper up
     def perform_test(self):
-        pass
+        if self._repeat_counter == 1:
+            print(f"Please place {self._object.name} in the marked spot and press ENTER.")
+            _ = input()
+        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 1))
+        self._gripper.close()
+        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
+        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_2)
+        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 2))
+        self._gripper.open()
+        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_2)
+        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 2))
+        self._gripper.close()
+        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_2)
+        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
+        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 1))
+        self._gripper.open()
+        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
 
-    # place holder down on the ground and wait for input telling whether to continue or not
+    # todo: maybe add some automatical offset checker
     def post_test(self):
-        pass
+        print("Was test successfull? y/n")
+        letter = input_getter(["y", "n"], str)
+        success = True if letter == "y" else False
+        self.test_result.runs_data.append(
+            {
+                "object": self._object.name,
+                "success": success,
+                "try": self._repeat_counter
+            }
+        )
+        if self._repeat_counter == self._repeat_times:
+            self._is_finished = True
+        else:
+            self._repeat_counter += 1
 
     # reset to initial position
-    def finish_testing(self) -> TestResult:
-        self._arm.back_to_comfortable_pose()
+    def finish_testing(self, last_gripper: bool) -> TestResult:
+        if last_gripper:
+            self._arm.back_to_comfortable_pose()
+        self._repeat_counter = 1
         return self.test_result

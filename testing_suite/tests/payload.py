@@ -12,6 +12,7 @@ class PayloadTest(Test):
 
     # move to grasp the "holder"
     def pre_test(self):
+        self._is_finished = False
         self._arm.move_cartesian(*POSES.ABOVE_PAYLOAD_TCP_POSE_1, add_to_history=True)
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1, add_to_history=True)
 
@@ -19,12 +20,12 @@ class PayloadTest(Test):
     def perform_test(self):
         print("Please provide weight added in grams as float:")
         self.payload_weight += input_getter(None, float)
-        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object_height, 1))
+        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 1))
 
         self._gripper.close()
 
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
-        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object_height, 1))
+        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 1))
 
         self._gripper.open()
 
@@ -44,6 +45,6 @@ class PayloadTest(Test):
         self._is_finished = not success
 
     # reset to initial position
-    def finish_testing(self) -> TestResult:
+    def finish_testing(self, *args, **kwargs) -> TestResult:
         self._arm.back_to_comfortable_pose()
         return self.test_result

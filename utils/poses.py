@@ -1,5 +1,7 @@
 import copy
 
+from utils.objects import Object
+
 
 class POSES:
     # default home setting
@@ -25,15 +27,15 @@ class POSES:
     ENGAGEMENT_TCP_POSE_1 = [-0.6, -0.109, -0.06, 2.22, 2.22, 0]
 
     # TODO: add above and engagement poses for second location
-    ABOVE_PAYLOAD_TCP_POSE_2 = [-0.6, -0.109, 0.35, 2.22, 2.22, 0]
-    LOWER_PAYLOAD_TCP_POSE_2 = [-0.6, -0.109, 0.05, 2.22, 2.22, 0]
-    ENGAGEMENT_TCP_POSE_2 = [-0.6, -0.109, -0.05, 2.22, 2.22, 0]
+    ABOVE_PAYLOAD_TCP_POSE_2 = [-0.6, 0.2, 0.35, 2.22, 2.22, 0]
+    LOWER_PAYLOAD_TCP_POSE_2 = [-0.6, 0.2, 0.15, 2.22, 2.22, 0]
+    ENGAGEMENT_TCP_POSE_2 = [-0.6, 0.2, -0.06, 2.22, 2.22, 0]
 
     @staticmethod
-    def get_engagement_pose(gripper, object_height, pose_number: int):
+    def get_engagement_pose(gripper, obj: Object, pose_number: int):
         if pose_number == 1:
             pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_1)
         else:
             pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_2)
-        pose[2] += gripper.height + object_height
+        pose[2] += gripper.height + obj.height
         return pose

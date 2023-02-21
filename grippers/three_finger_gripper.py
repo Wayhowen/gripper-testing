@@ -1,22 +1,22 @@
-import time
-
 from grippers.gripper_base import Gripper
 from utils.bluetooth.pybluez import Bluetooth
 
 
 class ThreeFingerGripper(Gripper):
-    def __init__(self, height, width, length, weight):
-        super().__init__(height, width, length, weight, arm_connected=False)
-        self.gripper_receiver = Bluetooth(mac='20:16:03:10:03:48', port=1)
+    def __init__(self, height, width, length, weight, bluetooth_connected=True):
+        super().__init__(height, width, length, weight)
+        self.gripper_receiver = Bluetooth(mac='20:16:03:10:03:48', port=1) if bluetooth_connected else None
         self.open()
 
     def open(self):
-        self.gripper_receiver.send(0)
-        self._gripper_state = "open"
+        if self.gripper_receiver:
+            self.gripper_receiver.send(0)
+            self._gripper_state = "open"
 
     def close(self):
-        self.gripper_receiver.send(200)
-        self._gripper_state = "closed"
+        if self.gripper_receiver:
+            self.gripper_receiver.send(200)
+            self._gripper_state = "closed"
 
 
 if __name__ == '__main__':

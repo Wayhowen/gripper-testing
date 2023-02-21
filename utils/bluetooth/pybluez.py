@@ -5,7 +5,6 @@ import bluetooth
 
 class Bluetooth:
     def __init__(self, mac='20:16:03:10:03:48', port=1):
-        # print(bluetooth.discover_devices())
         self._socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         self._socket.connect((mac, port))
 
@@ -24,8 +23,8 @@ if __name__ == '__main__':
     # simple inquiry example
     b = Bluetooth()
     time.sleep(1)
-    b.send(0)
-    time.sleep(2)
-    b.send(256)
+    b.send(1)
+    # time.sleep(2)
+    # b.send(256)
     # time.sleep(2)
     # b.close_connection()
