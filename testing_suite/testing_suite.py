@@ -12,19 +12,19 @@ class TestingSuite:
     def __init__(self):
         self._robotic_arm = Arm(0, speed=0.5, acceleration=0.1)
         self._test_setups = [
-            # (
-            #     PayloadTest(self._robotic_arm, initial_payload_weight=0.0),
-            #     [OBJECTS.PAYLOAD_BOX]
-            #  ),
             (
-                RepeatabilityTest(self._robotic_arm, 2),
-                [OBJECTS.PAYLOAD_BOX, OBJECTS.EGG]
-            )
+                PayloadTest(self._robotic_arm, initial_payload_weight=0.0),
+                [OBJECTS.PAYLOAD_BOX]
+             ),
+            # (
+            #     RepeatabilityTest(self._robotic_arm, 2),
+            #     [OBJECTS.PAYLOAD_BOX, OBJECTS.EGG]
+            # )
         ]
 
         # TODO: update gripper weight
         self._grippers = [
-            ThreeFingerGripper(0.12, 0, 0, 0.150, bluetooth_connected=False),
+            ThreeFingerGripper(0.12, 0, 0, 0.150, bluetooth_connected=True),
         ]
 
         self._csv_writer = CSVWriter()

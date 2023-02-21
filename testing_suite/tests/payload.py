@@ -26,6 +26,7 @@ class PayloadTest(Test):
 
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
         self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 1))
+        # _ = input()
 
         self._gripper.open()
 

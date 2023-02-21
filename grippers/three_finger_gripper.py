@@ -15,7 +15,7 @@ class ThreeFingerGripper(Gripper):
 
     def close(self):
         if self.gripper_receiver:
-            self.gripper_receiver.send(200)
+            self.gripper_receiver.send(1)
             self._gripper_state = "closed"
 
 
