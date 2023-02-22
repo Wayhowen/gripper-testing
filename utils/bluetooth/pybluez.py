@@ -25,8 +25,8 @@ class Bluetooth:
 if __name__ == '__main__':
     # simple inquiry example
     b = Bluetooth()
-    time.sleep(1)
-    b.send(1)
+    while True:
+        b.send(input())
     # time.sleep(2)
     # b.send(256)
     # time.sleep(2)

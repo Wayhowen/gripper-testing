@@ -1,4 +1,5 @@
 import copy
+import math
 
 from utils.objects import Object
 
@@ -39,3 +40,27 @@ class POSES:
             pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_2)
         pose[2] += gripper.height + obj.height
         return pose
+
+    @staticmethod
+    def get_poses_for_angle(gripper, obj: Object, pose_number: int, angle: int):
+        angle_in_radians = math.radians(angle)
+        if pose_number == 1:
+            prev_pose = copy.copy(POSES.LOWER_PAYLOAD_TCP_POSE_1)
+            pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_1)
+        else:
+            prev_pose = copy.copy(POSES.LOWER_PAYLOAD_TCP_POSE_2)
+            pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_2)
+        height = abs((pose[2] + gripper.height + obj.height) - prev_pose[2])
+        adjacent = height / math.tan(math.radians(90 - angle))
+
+        # change X movement
+        prev_pose[0] += adjacent
+        pose[0] += adjacent
+        # add height
+        pose[2] += gripper.height + obj.height
+        # add tilt
+        prev_pose[4] += angle_in_radians
+        pose[4] += angle_in_radians
+        prev_pose[3] += angle_in_radians
+        pose[3] += angle_in_radians
+        return prev_pose, pose

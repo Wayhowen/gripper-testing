@@ -3,6 +3,7 @@ import traceback
 from grippers.three_finger_gripper import ThreeFingerGripper
 from testing_suite.tests.payload import PayloadTest
 from testing_suite.tests.repeatability import RepeatabilityTest
+from testing_suite.tests.tilt import TiltTest
 from utils.csv_writer import CSVWriter
 from utils.objects import OBJECTS
 from utils.robotic_arm import Arm
@@ -12,19 +13,23 @@ class TestingSuite:
     def __init__(self):
         self._robotic_arm = Arm(0, speed=0.5, acceleration=0.1)
         self._test_setups = [
-            (
-                PayloadTest(self._robotic_arm, initial_payload_weight=0.0),
-                [OBJECTS.PAYLOAD_BOX]
-             ),
+            # (
+            #     PayloadTest(self._robotic_arm, initial_payload_weight=0.0),
+            #     [OBJECTS.PAYLOAD_BOX]
+            #  ),
             # (
             #     RepeatabilityTest(self._robotic_arm, 2),
-            #     [OBJECTS.PAYLOAD_BOX, OBJECTS.EGG]
-            # )
+            #     [OBJECTS.GLASS_BALL]
+            # ),
+              (
+                TiltTest(self._robotic_arm),
+                [OBJECTS.BALL]
+              )
         ]
 
         # TODO: update gripper weight
         self._grippers = [
-            ThreeFingerGripper(0.12, 0, 0, 0.150, bluetooth_connected=True),
+            ThreeFingerGripper(0.12, 0, 0, 0.150, bluetooth_connected=False),
         ]
 
         self._csv_writer = CSVWriter()
