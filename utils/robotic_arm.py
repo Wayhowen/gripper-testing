@@ -4,6 +4,7 @@ import traceback
 from urx import Robot
 
 from utils.poses import POSES
+from utils.utils import input_getter
 
 
 class Arm:
@@ -33,6 +34,8 @@ class Arm:
                 self.move(*command[1])
             elif command[0] == "l":
                 self.move_cartesian(*command[1])
+            elif command[0] == "p":
+                self.move_p(*command[1])
         self.clear_memory()
 
     def clear_memory(self):
@@ -43,6 +46,9 @@ class Arm:
             self._command_memory.append(("j", self.robot.getj()))
         elif position_type == "l":
             self._command_memory.append(("l", self.robot.getl()))
+        elif position_type == "p":
+            # TODO: verify if its get pose
+            self._command_memory.append(("p", self.robot.get_pose()))
         else:
             raise NotImplementedError
 
@@ -56,10 +62,43 @@ class Arm:
             self.add_to_memory("l")
         self.robot.movel([x, y, z, rx, ry, rz], vel=self._speed, acc=self._acceleration)
 
+    def move_p(self, x, y, z, rx, ry, rz, add_to_history=False):
+        if add_to_history:
+            self.add_to_memory("p")
+        self.robot.movep([x, y, z, rx, ry, rz], vel=self._speed, acc=self._acceleration)
+
     def stop(self, home=False):
         if home:
             self.move(*POSES.HOME)
         self.robot.close()
+
+    def interactive_test(self):
+        leave = False
+        while not leave:
+            print("Which operation to use? (j, l, p, q)")
+            letter = input_getter(["j", "l", "p", "q"], str)
+            if letter == "q":
+                break
+
+            print("Which pose entry to add to? (0-5)")
+            add_to = input_getter([1, 2, 3, 4, 5], int)
+            print("How much to add?")
+            to_add = input_getter(None, type_to_convert=float)
+
+            if letter == "j":
+                pose = self.robot.getj()
+                pose[add_to] += to_add
+                self.robot.movej(*pose)
+            elif letter == "l":
+                pose = self.robot.getl()
+                pose[add_to] += to_add
+                self.robot.movel(pose)
+            elif letter == "p":
+                # TODO; verify if this pose works
+                pose = self.robot.get_pose()
+                pose[add_to] += to_add
+                self.robot.movep(pose)
+
 
 
 if __name__ == '__main__':
