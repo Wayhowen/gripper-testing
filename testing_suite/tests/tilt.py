@@ -25,8 +25,11 @@ class TiltTest(Test):
         print(lower_pose, engagement_pose)
         self._arm.move_cartesian(*lower_pose)
         self._arm.move_cartesian(*engagement_pose)
+        self._gripper.close()
         self._arm.move_cartesian(*lower_pose)
-
+        self._arm.move_cartesian(*engagement_pose)
+        self._gripper.open()
+        self._arm.move_cartesian(*lower_pose)
 
     # place holder down on the ground and wait for input telling whether to continue or not
     def post_test(self):

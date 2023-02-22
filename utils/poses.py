@@ -58,7 +58,7 @@ class POSES:
         pose[0] += adjacent
         # add height
         pose[2] += gripper.height + obj.height
-        # add tilt
+        # add tilt TODO: FIX THIS
         prev_pose[4] += angle_in_radians
         pose[4] += angle_in_radians
         prev_pose[3] += angle_in_radians
