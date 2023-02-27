@@ -19,16 +19,15 @@ class TiltTest(Test):
     # TODO: work with movep
     def perform_test(self):
         print("Please provide the angle to test with as int:")
-        self.angle += input_getter(None, int)
+        self.angle = input_getter(None, int)
 
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
-        self._arm.tilt(self.angle)
+        # self._arm.tilt(self.angle)
         lower_pose, engagement_pose = POSES.get_poses_for_angle(self._gripper, self._arm.robot.getl(), self._arm.robot.getj(), self._object, 1, self.angle)
         print(lower_pose, engagement_pose)
         self._arm.move_cartesian(*lower_pose)
+        self._arm.tilt(self.angle)
         self._arm.move_cartesian(*engagement_pose)
-        # self._arm.interactive_test()
-        # self._arm.move_cartesian(*engagement_pose)
         # self._gripper.close()
         # self._arm.move_cartesian(*lower_pose)
         # self._arm.move_cartesian(*engagement_pose)

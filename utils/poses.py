@@ -45,26 +45,30 @@ class POSES:
 
     @staticmethod
     def get_poses_for_angle(gripper, base_pose: List[float], tcp_pose: List[float], obj: Object, pose_number: int, angle: int):
-        if pose_number == 1:
-            prev_pose = base_pose
-            pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_1)
-        else:
-            prev_pose = base_pose
-            pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_2)
-        height = abs((pose[2] + gripper.height + obj.height) - prev_pose[2])
-        adjacent = height / math.tan(math.radians(90 - angle))
-        print(adjacent, height)
+        prev_pose = base_pose
+        pose = POSES.get_engagement_pose(gripper, obj, pose_number)
+
+        opposite = pose[2] + gripper.height + obj.height
+        height = opposite * math.sin(math.radians(90 - angle))
+        x_movement = math.sqrt(opposite**2 - height**2)
+        print(height, x_movement)
+
+        # height = abs((pose[2] + tilted_gripper_height + obj.height) - prev_pose[2])
+        # adjacent = height / math.tan(math.radians(90 - angle))
+        # print(adjacent, height)
 
         # change X movement
-        prev_pose[0] += adjacent
-        pose[0] += adjacent
+        prev_pose[0] += x_movement
+        # change Z movement
+        pose[2] = opposite - height
         # add height
-        pose[2] += gripper.height + obj.height
+        # pose[2] += gripper.height + obj.height
         # add tilt TODO: FIX THIS
         # prev_pose[4] += angle_in_radians
         # pose[4] += angle_in_radians
         # prev_pose[3] += angle_in_radians
         # pose[3] += angle_in_radians
-        prev_pose = [*prev_pose[:3], *base_pose[3:]]
-        pose = [*pose[:3], *base_pose[3:]]
+        # TODO; add back in case we return to old ways
+        # prev_pose = [*prev_pose[:3], *base_pose[3:]]
+        # pose = [*pose[:3], *base_pose[3:]]
         return prev_pose, pose
