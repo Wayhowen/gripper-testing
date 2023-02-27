@@ -1,3 +1,4 @@
+import math
 import time
 import traceback
 
@@ -8,7 +9,7 @@ from utils.utils import input_getter
 
 
 class Arm:
-    def __init__(self, payload_weight, speed=1.5, acceleration=0.3):
+    def __init__(self, payload_weight, speed=1.5, acceleration=0.3, initial_pose="comfy"):
         try:
             self.robot = Robot("192.168.56.10")
             self._speed = speed
@@ -19,7 +20,10 @@ class Arm:
             # self.move(BASE, SHOULDER, ELBOW, WRIST_1, WRIST_2, WRIST_3)
             self._command_memory = []
 
-            self.move(*POSES.COMFORTABLE_POSE)
+            if initial_pose == "comfy":
+                self.move(*POSES.COMFORTABLE_POSE)
+            else:
+                self.move(*POSES.GRIPPER_CHANGE_POSE)
         except Exception as e:
             print("Connection exception, closing")
             self.stop()
@@ -56,6 +60,11 @@ class Arm:
         if add_to_history:
             self.add_to_memory("j")
         self.robot.movej([base, shoulder, elbow, wrist_1, wrist_2, wrist_3], vel=self._speed, acc=self._acceleration)
+
+    def tilt(self, tilt_angle):
+        pose = self.robot.getj()
+        pose[3] -= math.tan(math.radians(tilt_angle))
+        self.robot.movej(pose, vel=self._speed, acc=self._acceleration)
 
     def move_cartesian(self, x, y, z, rx, ry, rz, add_to_history=False):
         if add_to_history:
@@ -105,11 +114,8 @@ if __name__ == '__main__':
     # try:
     a = Arm(0)
     try:
-        # a.move(*COMFORTABLE_POSE)
-        # a.robot.stopj()
-        # print(*TEST_TCP_POSE)
-        a.move_cartesian(*POSES.ENGAGEMENT_TCP_POSE_1)
-        print(a.robot.getl())
+        # a.move_cartesian(*POSES.ABOVE_PAYLOAD_TCP_POSE_1, add_to_history=True)
+        a.robot.getl()
         # a.robot.stopl()
     except Exception as e:
         traceback.print_exc()

@@ -1,5 +1,6 @@
 import copy
 import math
+from typing import List
 
 from utils.objects import Object
 
@@ -15,6 +16,7 @@ class POSES:
 
     # POSES IN LINEAR SPACE
     HOME = [BASE, SHOULDER, ELBOW, WRIST_1, WRIST_2, WRIST_3]
+    GRIPPER_CHANGE_POSE = [0, 0, -1.57, -1.57, 0, 0]
     # comments from their code - # pi/2, -1.7947, 1.2356, pi -1.033, -pi/2 which is -1.5710, 0.0051
     COMFORTABLE_POSE = [0, -1.9049, 1.9520, -1.6088, -3.14 / 2, 0]
     PICKUP_POSE = [0, -1.57, 1.57, -1.57, -1.57, 0]
@@ -42,16 +44,16 @@ class POSES:
         return pose
 
     @staticmethod
-    def get_poses_for_angle(gripper, obj: Object, pose_number: int, angle: int):
-        angle_in_radians = math.radians(angle)
+    def get_poses_for_angle(gripper, base_pose: List[float], tcp_pose: List[float], obj: Object, pose_number: int, angle: int):
         if pose_number == 1:
-            prev_pose = copy.copy(POSES.LOWER_PAYLOAD_TCP_POSE_1)
+            prev_pose = base_pose
             pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_1)
         else:
-            prev_pose = copy.copy(POSES.LOWER_PAYLOAD_TCP_POSE_2)
+            prev_pose = base_pose
             pose = copy.copy(POSES.ENGAGEMENT_TCP_POSE_2)
         height = abs((pose[2] + gripper.height + obj.height) - prev_pose[2])
         adjacent = height / math.tan(math.radians(90 - angle))
+        print(adjacent, height)
 
         # change X movement
         prev_pose[0] += adjacent
@@ -59,8 +61,10 @@ class POSES:
         # add height
         pose[2] += gripper.height + obj.height
         # add tilt TODO: FIX THIS
-        prev_pose[4] += angle_in_radians
-        pose[4] += angle_in_radians
-        prev_pose[3] += angle_in_radians
-        pose[3] += angle_in_radians
+        # prev_pose[4] += angle_in_radians
+        # pose[4] += angle_in_radians
+        # prev_pose[3] += angle_in_radians
+        # pose[3] += angle_in_radians
+        prev_pose = [*prev_pose[:3], *base_pose[3:]]
+        pose = [*pose[:3], *base_pose[3:]]
         return prev_pose, pose
