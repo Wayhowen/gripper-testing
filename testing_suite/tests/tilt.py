@@ -24,10 +24,16 @@ class TiltTest(Test):
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
         # self._arm.tilt(self.angle)
         lower_pose, engagement_pose = POSES.get_poses_for_angle(self._gripper, self._arm.robot.getl(), self._arm.robot.getj(), self._object, 1, self.angle)
+
         print(lower_pose, engagement_pose)
-        self._arm.move_cartesian(*lower_pose)
         self._arm.tilt(self.angle)
-        self._arm.move_cartesian(*engagement_pose)
+        tilty = self._arm.robot.getl()
+        prev_pose = [*lower_pose[:3], *tilty[3:]]
+        pose = [*engagement_pose[:3], *tilty[3:]]
+
+        # self._arm.move_cartesian(*prev_pose)
+        # self._arm.move_cartesian(*pose)
+
         # self._gripper.close()
         # self._arm.move_cartesian(*lower_pose)
         # self._arm.move_cartesian(*engagement_pose)

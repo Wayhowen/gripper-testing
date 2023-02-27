@@ -48,10 +48,10 @@ class POSES:
         prev_pose = base_pose
         pose = POSES.get_engagement_pose(gripper, obj, pose_number)
 
-        opposite = pose[2] + gripper.height + obj.height
-        height = opposite * math.sin(math.radians(90 - angle))
+        opposite = abs(pose[2] - prev_pose[2])
+        height = opposite * math.sin(math.radians(angle))
         x_movement = math.sqrt(opposite**2 - height**2)
-        print(height, x_movement)
+        print(opposite, height, x_movement)
 
         # height = abs((pose[2] + tilted_gripper_height + obj.height) - prev_pose[2])
         # adjacent = height / math.tan(math.radians(90 - angle))
@@ -60,7 +60,7 @@ class POSES:
         # change X movement
         prev_pose[0] += x_movement
         # change Z movement
-        pose[2] = opposite - height
+        pose[2] += height
         # add height
         # pose[2] += gripper.height + obj.height
         # add tilt TODO: FIX THIS
