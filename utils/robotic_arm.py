@@ -22,6 +22,7 @@ class Arm:
 
             if initial_pose == "comfy":
                 self.move(*POSES.COMFORTABLE_POSE)
+                print(self.robot.getl())
             else:
                 self.move(*POSES.GRIPPER_CHANGE_POSE)
         except Exception as e:
