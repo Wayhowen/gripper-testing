@@ -1,7 +1,3 @@
-import copy
-import math
-import time
-
 from dto.test_result import TestResult
 from testing_suite.tests.test_base import Test
 from utils.poses import POSES
@@ -25,10 +21,12 @@ class TiltTest(Test):
     def perform_test(self):
         print("Please provide the angle to test with as int:")
         self.angle = input_getter(None, int)
+        prev_pose = self._arm.robot.getl()
 
         self._arm.tilt(self.angle)
         current_tcp_pose = self._arm.robot.getl()
         engagement_pose = POSES.get_engagement_pose_at_current_angle(
+            prev_pose,
             current_tcp_pose,
             self._gripper,
             self._object
@@ -40,6 +38,7 @@ class TiltTest(Test):
         print("Press ENTER to release object")
         _ = input()
         self._gripper.open()
+        self._arm.tilt(-self.angle)
 
     # place holder down on the ground and wait for input telling whether to continue or not
     def post_test(self):

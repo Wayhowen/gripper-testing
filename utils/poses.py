@@ -43,5 +43,10 @@ class POSES:
 
     # TODO: we might need to account for different gripper height
     @staticmethod
-    def get_engagement_pose_at_current_angle(current_tcp_pose: List[float], gripper, obj: Object):
-        return [*POSES.get_engagement_pose(gripper, obj, 1)[:3], *current_tcp_pose[3:]]
+    def get_engagement_pose_at_current_angle(prev_pose: List[float], current_tcp_pose: List[float], gripper, obj: Object):
+        # width = 0.0743/2
+        # height = 0.1325
+        height_diff = abs(prev_pose[2] - current_tcp_pose[2])
+        eng_pose = POSES.get_engagement_pose(gripper, obj, 1)[:3]
+        eng_pose[2] += height_diff
+        return [*eng_pose, *current_tcp_pose[3:]]
