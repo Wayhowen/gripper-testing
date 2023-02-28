@@ -1,5 +1,4 @@
 import copy
-import math
 from typing import List
 
 from utils.objects import Object
@@ -43,32 +42,7 @@ class POSES:
         pose[2] += gripper.height + obj.height
         return pose
 
+    # TODO: we might need to account for different gripper height
     @staticmethod
-    def get_poses_for_angle(gripper, base_pose: List[float], tcp_pose: List[float], obj: Object, pose_number: int, angle: int):
-        prev_pose = base_pose
-        pose = POSES.get_engagement_pose(gripper, obj, pose_number)
-
-        opposite = abs(pose[2] - prev_pose[2])
-        height = opposite * math.sin(math.radians(angle))
-        x_movement = math.sqrt(opposite**2 - height**2)
-        print(opposite, height, x_movement)
-
-        # height = abs((pose[2] + tilted_gripper_height + obj.height) - prev_pose[2])
-        # adjacent = height / math.tan(math.radians(90 - angle))
-        # print(adjacent, height)
-
-        # change X movement
-        prev_pose[0] += x_movement
-        # change Z movement
-        pose[2] += height
-        # add height
-        # pose[2] += gripper.height + obj.height
-        # add tilt TODO: FIX THIS
-        # prev_pose[4] += angle_in_radians
-        # pose[4] += angle_in_radians
-        # prev_pose[3] += angle_in_radians
-        # pose[3] += angle_in_radians
-        # TODO; add back in case we return to old ways
-        # prev_pose = [*prev_pose[:3], *base_pose[3:]]
-        # pose = [*pose[:3], *base_pose[3:]]
-        return prev_pose, pose
+    def get_engagement_pose_at_current_angle(current_tcp_pose: List[float], gripper, obj: Object):
+        return [*POSES.get_engagement_pose(gripper, obj, 1)[:3], *current_tcp_pose[3:]]

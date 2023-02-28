@@ -63,9 +63,12 @@ class Arm:
         self.robot.movej([base, shoulder, elbow, wrist_1, wrist_2, wrist_3], vel=self._speed, acc=self._acceleration)
 
     def tilt(self, tilt_angle):
-        pose = self.robot.getj()
-        pose[3] -= math.tan(math.radians(tilt_angle))
-        self.robot.movej(pose, vel=self._speed, acc=self._acceleration)
+        self.robot.movel(
+            (0, 0, 0, -math.tan(math.radians(tilt_angle)), 0, 0),
+            vel=self._speed,
+            acc=self._acceleration,
+            relative=True
+        )
 
     def move_cartesian(self, x, y, z, rx, ry, rz, add_to_history=False):
         if add_to_history:
