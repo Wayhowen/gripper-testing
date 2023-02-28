@@ -14,30 +14,30 @@ class TestingSuite:
     def __init__(self, initial_pose="comfy"):
         self._robotic_arm = Arm(0, speed=0.5, acceleration=0.1, initial_pose=initial_pose)
         self._test_setups = [
-            # (
-            #     PayloadTest(self._robotic_arm, initial_payload_weight=0.0),
-            #     [OBJECTS.PAYLOAD_BOX]
-            #  ),
+            (
+                PayloadTest(self._robotic_arm, initial_payload_weight=120.0),
+                [OBJECTS.PAYLOAD_BOX]
+             ),
             # (
             #     RepeatabilityTest(self._robotic_arm, 2),
             #     [OBJECTS.GLASS_BALL]
             # ),
-              (
-                TiltTest(self._robotic_arm),
-                [OBJECTS.BALL]
-              )
+            #   (
+            #     TiltTest(self._robotic_arm),
+            #     [OBJECTS.GLASS_BALL]
+            #   )
         ]
 
         # TODO: update gripper weight
         self._grippers = [
-            ThreeFingerGripper(0.12, 0, 0, 0.150, bluetooth_connected=False),
+            ThreeFingerGripper(0.12, 0, 0, 0.150, bluetooth_connected=True),
         ]
 
         self._csv_writer = CSVWriter()
 
     def run_tests(self):
+        test_result = []
         try:
-            test_result = []
             for gripper in self._grippers:
                 for test, objects in self._test_setups:
                     for obj in objects:
@@ -59,6 +59,7 @@ class TestingSuite:
                     test_result = []
         except Exception as e:
             traceback.print_exc()
+            self._csv_writer.save_test_results(test_result)
         finally:
             self._robotic_arm.stop(home=True)
 
