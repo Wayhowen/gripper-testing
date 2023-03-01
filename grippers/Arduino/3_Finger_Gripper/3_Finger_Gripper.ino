@@ -9,7 +9,7 @@ int sensorValue;
 int threshold = 80;
 int threshCount = 0;
 int gripperDelay = 25;
-int baseGripPosition = 100;
+int baseGripPosition = 80;
 
 void setup() {
   myservo.attach(7);
