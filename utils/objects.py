@@ -5,8 +5,8 @@ class Object:
 
 
 class OBJECTS:
-    PAYLOAD_BOX = Object("Payload box", 0.027)
-    GLASS_BALL = Object("Glass ball", 0.014)
+    PAYLOAD_BOX = Object("Payload box", 0.041)
+    GLASS_BALL = Object("Glass ball", 0.020)
 
     # TODO: measure those
     EGG = Object("Egg", 0.03)
