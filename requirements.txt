@@ -1,4 +1,4 @@
 math3d==3.4.1
 numpy==1.19.5
-PyBluez==0.23
+PyBluez @ file:///C:/Users/jakub/Desktop/ITU%20sem%204/gripper-testing/utils/bluetooth/PyBluez-0.22-cp36-cp36m-win_amd64.whl
 urx @ git+https://github.com/jkur/python-urx@a61f512a884a9c3b5b66938dc15fa6b831b5e2ff
