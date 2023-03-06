@@ -26,16 +26,16 @@ class RepeatabilityTest(Test):
         self._gripper.close()
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_2)
+        self.continue_test_step()
         self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 2))
         self._gripper.open()
-        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_2)
-        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 2))
+        self.continue_test_step()
         self._gripper.close()
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_2)
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
+        self.continue_test_step()
         self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 1))
         self._gripper.open()
-        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
 
     # todo: maybe add some automatical offset checker
     def post_test(self):
@@ -49,7 +49,7 @@ class RepeatabilityTest(Test):
                 "try": self._repeat_counter
             }
         )
-        if self._repeat_counter == self._repeat_times:
+        if self._repeat_counter == self._repeat_times or not success:
             self._is_finished = True
         else:
             self._repeat_counter += 1
@@ -60,3 +60,7 @@ class RepeatabilityTest(Test):
             self._arm.back_to_comfortable_pose()
         self._repeat_counter = 1
         return self.test_result
+    
+    def continue_test_step(self):
+        print("Press ENTER to continue test")
+        _ = input()

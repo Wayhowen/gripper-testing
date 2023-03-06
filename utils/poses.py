@@ -30,7 +30,7 @@ class POSES:
 
     ABOVE_PAYLOAD_TCP_POSE_2 = [-0.6, 0.2, 0.245, 2.22, 2.22, 0]
     LOWER_PAYLOAD_TCP_POSE_2 = [-0.6, 0.2, 0.0415, 2.22, 2.22, 0]
-    ENGAGEMENT_TCP_POSE_2 = [-0.6, 0.2, -0.145, 2.22, 2.22, 0]
+    ENGAGEMENT_TCP_POSE_2 = [-0.6, 0.2, -0.15, 2.22, 2.22, 0]
 
     @staticmethod
     def get_engagement_pose(gripper, obj: Object, pose_number: int):

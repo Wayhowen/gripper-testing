@@ -25,11 +25,13 @@ class PayloadTest(Test):
         self._gripper.close()
 
         self._arm.move_cartesian(*POSES.ABOVE_PAYLOAD_TCP_POSE_1)
-        self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 1))
+        #self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 1))
+
+        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
 
         self._gripper.open()
 
-        self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
+        #self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
 
     # place holder down on the ground and wait for input telling whether to continue or not
     def post_test(self):
