@@ -19,8 +19,8 @@ class TestingSuite:
             #    [OBJECTS.GLASS_BALL]
             #),
             (
-                RepeatabilityTest(self._robotic_arm, 5),
-                [OBJECTS.GLASS_BALL]
+                RepeatabilityTest(self._robotic_arm, 40),
+                [OBJECTS.HEDGEHOG]
             ),
             #   (
             #     TiltTest(self._robotic_arm),

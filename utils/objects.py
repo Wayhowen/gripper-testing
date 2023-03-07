@@ -7,6 +7,7 @@ class Object:
 class OBJECTS:
     PAYLOAD_BOX = Object("Payload box", 0.041)
     GLASS_BALL = Object("Glass ball", 0.035)
+    HEDGEHOG = Object("Hedgehog", 0.02)
 
     # TODO: measure those
     EGG = Object("Egg", 0.03)
