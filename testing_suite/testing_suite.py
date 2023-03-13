@@ -14,17 +14,17 @@ class TestingSuite:
     def __init__(self, initial_pose="comfy"):
         self._robotic_arm = Arm(0, speed=0.5, acceleration=0.1, initial_pose=initial_pose)
         self._test_setups = [
-            #(
-            #    PayloadTest(self._robotic_arm, initial_payload_weight=120.0),
-            #    [OBJECTS.GLASS_BALL]
-            #),
             (
-                RepeatabilityTest(self._robotic_arm, 20),
-                [OBJECTS.PAYLOAD_BOX]
+               PayloadTest(self._robotic_arm, initial_payload_weight=190),
+               [OBJECTS.PAYLOAD_BOX]
             ),
+            # (
+            #     RepeatabilityTest(self._robotic_arm, 20),
+            #     [OBJECTS.PAYLOAD_BOX]
+            # ),
             #   (
             #     TiltTest(self._robotic_arm),
-            #     [OBJECTS.GLASS_BALL]
+            #     [OBJECTS.PAYLOAD_BOX]
             #   )
         ]
 

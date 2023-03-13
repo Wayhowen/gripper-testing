@@ -1,6 +1,6 @@
 ### tests left out:
 - reach
-- energy efficiency
+- energy efficiency (cv to monitor power source)
 - speed (this could potentially be done)
 - perching
 - drone speed

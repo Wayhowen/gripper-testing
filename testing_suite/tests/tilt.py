@@ -1,3 +1,5 @@
+import math
+
 from dto.test_result import TestResult
 from testing_suite.tests.test_base import Test
 from utils.poses import POSES
@@ -9,11 +11,13 @@ class TiltTest(Test):
     def __init__(self, robotic_arm: Arm):
         super().__init__(robotic_arm)
         self.angle = 0
+        self.amount_to_lower = 0
 
     # move to grasp the "holder"
     def pre_test(self):
         self._is_finished = False
         self._arm.move_cartesian(*POSES.ABOVE_PAYLOAD_TCP_POSE_1, add_to_history=True)
+        # self._arm.tilt_wrist(90)
         # self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1, add_to_history=True)
 
     # TODO: work with movep
@@ -33,6 +37,22 @@ class TiltTest(Test):
         )
 
         self._arm.move_cartesian(*engagement_pose)
+
+        while True:
+            print("Is arm low enough ? y/n")
+            letter = input_getter(["y", "n"], str)
+            if letter == "y":
+                break
+            print("Please provide float to say how much more to lower the arm")
+            lower_by = input_getter(None, float)
+            print(self.angle)
+            base = lower_by*math.sin(math.radians(self.angle))
+            print(base)
+            height = math.sqrt(lower_by**2-base**2)
+            print(height)
+
+            self._arm.lower_arm(-height, -base)
+            self.amount_to_lower += lower_by
         self._gripper.close()
         self._arm.move_cartesian(*current_tcp_pose)
         print("Press ENTER to release object")
@@ -48,9 +68,11 @@ class TiltTest(Test):
         self.test_result.runs_data.append(
             {
                 "tilt": self.angle,
-                "success": success
+                "success": success,
+                "lowered_by": self.amount_to_lower
             }
         )
+        self.amount_to_lower = 0
         self._is_finished = not success
 
     # reset to initial position
