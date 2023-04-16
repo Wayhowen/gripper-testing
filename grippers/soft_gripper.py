@@ -10,12 +10,12 @@ class SoftGripper(Gripper):
 
     def open(self):
         if self.gripper_receiver:
-            self.gripper_receiver.send(1)
+            self.gripper_receiver.send(0)
             self._gripper_state = "open"
 
     def close(self):
         if self.gripper_receiver:
-            self.gripper_receiver.send(0)
+            self.gripper_receiver.send(1)
             self._gripper_state = "closed"
 
 
