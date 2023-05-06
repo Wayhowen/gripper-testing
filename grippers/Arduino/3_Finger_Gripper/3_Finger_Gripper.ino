@@ -30,18 +30,24 @@ void loop() {
 }
 
 void engage(){
-  Serial.println("Engaging payload");
+  //long start = millis();
+  //Serial.println("Engaging payload");
   for (pos = baseGripPosition; pos <= 180; pos += 1) {
     boolean res = pressureSense();
     if(res) break;
     myservo.write(pos);
     delay(gripperDelay);
   }
+  //Serial.println(millis()-start);
 }
 
 void disengage(){
-  Serial.println("Disengaging payload");
+  //long start = millis();
+  //Serial.println("Disengaging payload");
   myservo.write(baseGripPosition);
+  //while(myservo.read() > 0){}
+  //Serial.println(millis()-start);
+  
 }
 
 boolean pressureSense(){
