@@ -62,9 +62,25 @@ class Arm:
             self.add_to_memory("j")
         self.robot.movej([base, shoulder, elbow, wrist_1, wrist_2, wrist_3], vel=self._speed, acc=self._acceleration)
 
+    def lower_arm(self, height, base):
+        self.robot.movel(
+            (0, base, height, 0, 0, 0),
+            vel=self._speed,
+            acc=self._acceleration,
+            relative=True
+        )
+
     def tilt(self, tilt_angle):
         self.robot.movel(
-            (0, 0, 0, -math.tan(math.radians(tilt_angle)), 0, 0),
+            (0, 0, 0, -math.radians(tilt_angle), 0, 0),
+            vel=self._speed,
+            acc=self._acceleration,
+            relative=True
+        )
+
+    def tilt_wrist(self, tilt_angle):
+        self.robot.movej(
+            (0, 0, 0, 0, 0, math.radians(tilt_angle)),
             vel=self._speed,
             acc=self._acceleration,
             relative=True
