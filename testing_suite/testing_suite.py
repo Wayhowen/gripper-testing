@@ -16,15 +16,15 @@ class TestingSuite:
         self._test_setups = [
             (
                PayloadTest(self._robotic_arm, initial_payload_weight=34),
-               [OBJECTS.PAYLOAD_BOX]
+               [OBJECTS.MEDIUM_BALL]
             ),
             # (
-            #     RepeatabilityTest(self._robotic_arm, 20),
-            #     [OBJECTS.PAYLOAD_BOX]
+            #     RepeatabilityTest(self._robotic_arm, 5),
+            #     [OBJECTS.REPEATABILITY_GLASS_BALL]
             # ),
             #   (
             #     TiltTest(self._robotic_arm),
-            #     [OBJECTS.PAYLOAD_BOX]
+            #     [OBJECTS.MEDIUM_BALL]
             #   )
         ]
 

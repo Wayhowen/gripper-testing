@@ -8,19 +8,20 @@ class Bluetooth:
         self._socket = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
         self._socket.connect((mac, port))
 
-    def send(self, data):
+    def send(self, data, wait=None):
         self._socket.send(bytes(str(data), 'UTF-8'))
-        self.wait_until_received(data)
+        self.wait_until_received(data, wait)
 
     def close_connection(self):
         self._socket.close()
 
     # TODO: if we figure out how to do bluetooth send/receive, change this
-    def wait_until_received(self, data):
+    def wait_until_received(self, data, wait=None):
         if data == 0:
-            time.sleep(2)
+            time.sleep(wait or 2)
         else:
-            time.sleep(4)
+            time.sleep(wait or 4)
+
 
 if __name__ == '__main__':
     # simple inquiry example

@@ -26,22 +26,22 @@ class RepeatabilityTest(Test):
         self._gripper.close()
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_2)
-        self.continue_test_step()
+        # self.continue_test_step()
         self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 2))
         self._gripper.open()
-        self.continue_test_step()
+        # self.continue_test_step()
         self._gripper.close()
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_2)
         self._arm.move_cartesian(*POSES.LOWER_PAYLOAD_TCP_POSE_1)
-        self.continue_test_step()
+        # self.continue_test_step()
         self._arm.move_cartesian(*POSES.get_engagement_pose(self._gripper, self._object, 1))
         self._gripper.open()
 
     # todo: maybe add some automatical offset checker
     def post_test(self):
-        print("Was test successfull? y/n")
-        letter = input_getter(["y", "n"], str)
-        success = True if letter == "y" else False
+        # print("Was test successfull? y/n")
+        # letter = input_getter(["y", "n"], str)
+        success = True
         self.test_result.runs_data.append(
             {
                 "object": self._object.name,

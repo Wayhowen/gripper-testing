@@ -52,10 +52,6 @@ void disengage(){
 
 boolean pressureSense(){
   sensorValue = analogRead(sensorPin);
-  /*if(sensorValue > 0){
-    Serial.println(sensorValue);
-    delay(5);
-  }*/
   if(sensorValue > threshold){
       threshCount++;
       Serial.println(threshCount);
@@ -72,3 +68,5 @@ boolean pressureSense(){
   }
   return false;
 }
+
+// distinct list: btSerial, setup, attach, begin, println, pinMode, loop, available, readString, engage, disengage, write, read, pressureSense, delay, analogRead
