@@ -24,6 +24,7 @@ class POSES:
     # Z in this positions is fucked up
     COMFORTABLE_TCP_POSE = [-0.347, -0.109, 0.245, 2.22, 2.22, 0]
 
+    ABOVE_PAYLOAD_HIGHER_TCP_POSE_1 = [-0.6, -0.109, 0.45, 2.22, 2.22, 0]
     ABOVE_PAYLOAD_TCP_POSE_1 = [-0.6, -0.109, 0.24, 2.22, 2.22, 0]
     LOWER_PAYLOAD_TCP_POSE_1 = [-0.6, -0.109, 0.0365, 2.22, 2.22, 0]
     ENGAGEMENT_TCP_POSE_1 = [-0.6, -0.109, -0.15, 2.22, 2.22, 0]

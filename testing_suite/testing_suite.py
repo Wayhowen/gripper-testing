@@ -1,7 +1,9 @@
 import traceback
 
+from grippers.braided_gripper import BraidedGripper
 from grippers.soft_gripper import SoftGripper
 from testing_suite.tests.payload import PayloadTest
+from testing_suite.tests.paylod_braided import PayloadBraidedTest
 from testing_suite.tests.repeatability import RepeatabilityTest
 from testing_suite.tests.tilt import TiltTest
 from utils.csv_writer import CSVWriter
@@ -12,11 +14,16 @@ from utils.robotic_arm import Arm
 
 class TestingSuite:
     def __init__(self, initial_pose="comfy"):
+        gripper = BraidedGripper(0.12, 0, 0, 0.150, bluetooth_connected=True)
+
+        self._grippers = [
+            gripper
+        ]
         self._robotic_arm = Arm(0, speed=0.5, acceleration=0.1, initial_pose=initial_pose)
         self._test_setups = [
             (
-               PayloadTest(self._robotic_arm, initial_payload_weight=34),
-               [OBJECTS.MEDIUM_BALL]
+               PayloadBraidedTest(self._robotic_arm, initial_payload_weight=34),
+               [OBJECTS.PAYLOAD_BOX]
             ),
             # (
             #     RepeatabilityTest(self._robotic_arm, 5),
@@ -26,11 +33,6 @@ class TestingSuite:
             #     TiltTest(self._robotic_arm),
             #     [OBJECTS.MEDIUM_BALL]
             #   )
-        ]
-
-        # TODO: update gripper weight
-        self._grippers = [
-            SoftGripper(0.12, 0, 0, 0.150, bluetooth_connected=True),
         ]
 
         self._csv_writer = CSVWriter()
@@ -56,6 +58,7 @@ class TestingSuite:
                         print(f"Testing of {test.name} finished")
                         test_result.append(test.finish_testing(last_gripper=obj == objects[-1]))
                     self._csv_writer.save_test_results(test_result)
+                    gripper.close()
                     test_result = []
         except Exception as e:
             traceback.print_exc()

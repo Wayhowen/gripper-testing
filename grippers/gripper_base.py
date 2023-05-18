@@ -1,7 +1,5 @@
 from abc import abstractmethod
 
-from utils.robotic_arm import Arm
-
 
 class Gripper:
     # TODO: possibly change those values to the ones we will use in actual testing
@@ -11,8 +9,6 @@ class Gripper:
         self.length = length
 
         self._gripper_state = None
-
-        self.arm = Arm(gripper_weight)
 
     @property
     def gripper_open(self):

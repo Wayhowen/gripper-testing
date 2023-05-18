@@ -11,6 +11,7 @@ from utils.utils import input_getter
 class Arm:
     def __init__(self, payload_weight, speed=1.5, acceleration=0.3, initial_pose="comfy"):
         try:
+            print("init")
             self.robot = Robot("192.168.56.10")
             self._speed = speed
             self._acceleration = acceleration
