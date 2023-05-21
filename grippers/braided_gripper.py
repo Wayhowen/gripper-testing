@@ -14,10 +14,10 @@ class BraidedGripper(Gripper):
             self.gripper_receiver.send(0, wait_for)
             self._gripper_state = "open"
 
-    def close(self):
+    def close(self, wait_for: int = 4):
         print("close called")
         if self.gripper_receiver:
-            self.gripper_receiver.send(1, 4)
+            self.gripper_receiver.send(1, wait_for)
             self._gripper_state = "closed"
 
 

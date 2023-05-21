@@ -5,7 +5,9 @@ from grippers.soft_gripper import SoftGripper
 from testing_suite.tests.payload import PayloadTest
 from testing_suite.tests.paylod_braided import PayloadBraidedTest
 from testing_suite.tests.repeatability import RepeatabilityTest
+from testing_suite.tests.repeatability_braided import RepeatabilityBraidedTest
 from testing_suite.tests.tilt import TiltTest
+from testing_suite.tests.tilt_braided import TiltBraidedTest
 from utils.csv_writer import CSVWriter
 from utils.objects import OBJECTS
 from utils.poses import POSES
@@ -21,18 +23,18 @@ class TestingSuite:
         ]
         self._robotic_arm = Arm(0, speed=0.5, acceleration=0.1, initial_pose=initial_pose)
         self._test_setups = [
-            (
-               PayloadBraidedTest(self._robotic_arm, initial_payload_weight=34),
-               [OBJECTS.PAYLOAD_BOX]
-            ),
             # (
-            #     RepeatabilityTest(self._robotic_arm, 5),
-            #     [OBJECTS.REPEATABILITY_GLASS_BALL]
+            #    PayloadBraidedTest(self._robotic_arm, initial_payload_weight=34),
+            #    [OBJECTS.PAYLOAD_BOX]
             # ),
-            #   (
-            #     TiltTest(self._robotic_arm),
-            #     [OBJECTS.MEDIUM_BALL]
-            #   )
+            # (
+            #     RepeatabilityBraidedTest(self._robotic_arm, 1),
+            #     [OBJECTS.PAYLOAD_BOX]
+            # ),
+              (
+                TiltBraidedTest(self._robotic_arm),
+                [OBJECTS.PAYLOAD_BOX]
+              )
         ]
 
         self._csv_writer = CSVWriter()
