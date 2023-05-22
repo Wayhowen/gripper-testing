@@ -9,8 +9,8 @@ const int pace = 600;
 SoftwareSerial btSerial(3, 4);
 Stepper myStepper(stepsPerRevolution, 5, 6);
 
-
 void setup() {
+  pinMode(9, OUTPUT);
   myStepper.setSpeed(pace);
   Serial.begin(9600);
   Serial.println("Ready");
@@ -28,17 +28,25 @@ void loop() {
 }
 
 void retract(int rounds) {
+  digitalWrite(9, LOW);
+  delay(2500);  
+
   for(int r = 0; r < rounds; r++){
-    Serial.println("clockwise");
+    //Serial.println("clockwise");
     myStepper.step(stepsPerRevolution);
     //delay(500);
   }
 }
 
 void extend(int rounds) {
-  for(int r = 0; r < rounds; r++){
-    Serial.println("counterclockwise");
-    myStepper.step(-stepsPerRevolution);
-    //delay(500);
-  }
+  /*if(retracted){
+    for(int r = 0; r < rounds; r++){
+      Serial.println("counterclockwise");
+      myStepper.step(-stepsPerRevolution);
+      //delay(500);
+    }
+  }*/
+  Serial.println("Released");
+  digitalWrite(9, HIGH);
+  delay(500);
 }
